@@ -1,20 +1,16 @@
 const { User, UserCv } = require('../models')
 const bcrypt = require('bcrypt')
 const jwt = require('../helpers/jwtHelpers')
-const { v4: uuidv4 } = require('uuid')
+// const { v4: uuidv4 } = require('uuid')
 
 class AuthController {
     static async register(req, res) {
         try{
-            const {name, email, gender, password, repassword} = req.body
-            let avatar = null
-            let salt = "salt"
-            let birthdate = null
-            const hashPwd = bcrypt.hashSync(password, 5)
-            let role = "user"
+            const {name, username, email, password, repassword} = req.body
+            const hashPwd = bcrypt.hashSync(password, 10)
 
             let user = await User.create({
-                name, email, gender, password:hashPwd, avatar, salt, birthdate, role
+                name, username, email, password:hashPwd
             })
             res.status(201).json(user)
 
@@ -25,10 +21,10 @@ class AuthController {
     static async login(req, res) {
         try{
             console.log('masuk ke login controller')
-            const {email, password} = req.body
+            const {username, password} = req.body
             let user = await User.findOne({
                 where: {
-                    email
+                    username
                 }
             })
             // console.log(user)
