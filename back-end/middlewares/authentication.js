@@ -2,7 +2,8 @@ const { tokenVerifier } = require("../helpers/jwtHelpers")
 
 const authentication = (req, res, next) => {
     // console.log('authentication 1');
-    const token = req.headers.access_token
+    const token = req.headers['access-token']
+    // console.log(req.headers);
     // console.log('authentication 2');
     
     if(token){

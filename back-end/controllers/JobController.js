@@ -58,7 +58,8 @@ class JobController {
 
     static async jobLists(req, res) {
         try{
-            console.log('testing')
+            // console.log('testing')
+            console.log(req.headers);
             let frontUrl = new URL(`${req.protocol}://${req.get('host')}${req.originalUrl}`)
             // console.log(frontUrl)
             var backUrl = new URL("http://dev3.dansmultipro.co.id/api/recruitment/positions.json")

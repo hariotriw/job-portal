@@ -22,6 +22,7 @@ class AuthController {
         try{
             console.log('masuk ke login controller')
             const {username, password} = req.body
+            // console.log(req.body)
             let user = await User.findOne({
                 where: {
                     username
