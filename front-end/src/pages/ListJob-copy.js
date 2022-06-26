@@ -16,9 +16,7 @@ const ListJob = () => {
     let [location, setLocation] = useState('')
     let [fulltime, setFulltime] = useState(false)
     let [currentPage, setCurrentPage] = useState(1)
-    let [minPage, setMinPage] = useState(1)
-    let [maxPage, setMaxPage] = useState(2)
-    let [totalData, setTotalData] = useState(0)
+    let [minPage, setMinPage] = useState(0)
 
 	const { getDataUserResult, loginStatusResult } = useSelector((state) => state.AuthReducer)
 	const { getJobListsLoading, getJobListsResult, getJobListsError } = useSelector((state) => state.JobReducer)
@@ -49,20 +47,11 @@ const ListJob = () => {
 
     useEffect(() => {
         // console.log(getJobListsResult);
-        setMaxPage(getJobListsResult.imaxPage)
-        setTotalData(getJobListsResult.itotalData)
 		
 	}, [getJobListsResult])
 
-    useEffect(() => {
-        // console.log(getJobListsResult);
-        // console.log(currentPage);
-		dispatch(getJobLists({description, location, fulltime, currentPage}))
-	}, [currentPage])
-
     const searchHandle = (e) => {
         e.preventDefault()
-        setCurrentPage(1)
         dispatch(getJobLists({description, location, fulltime, currentPage}))
 		// console.log(description)
 		// console.log(location)
@@ -72,30 +61,11 @@ const ListJob = () => {
     const resetHandle = (e) => {
         setDescription('')
         setLocation('')
-        setCurrentPage(1)
         dispatch(getJobLists({currentPage}))
         // setFulltime(false)
 		// console.log(description)
 		// console.log(location)
 		// console.log(fulltime)
-    }
-    const prevPageHandler = (e) => {
-        // e.preventDefault()
-        if(currentPage >= minPage ){
-        // if(currentPage >= minPage && currentPage !== minPage + 1){
-            let newCurrentPage = currentPage - 1
-            setCurrentPage(newCurrentPage)
-        }
-        // dispatch(getJobLists({description, location, fulltime, currentPage}))
-    }
-    const nextPageHandler = (e) => {
-        // e.preventDefault()
-        if(currentPage <= maxPage){
-        // if(currentPage <= maxPage && currentPage !== maxPage - 1){
-            let newCurrentPage = currentPage + 1
-            setCurrentPage(newCurrentPage)
-        }
-        // dispatch(getJobLists({description, location, fulltime, currentPage}))
     }
     
     const flagChangeHandle = (e) => {
@@ -176,7 +146,7 @@ const ListJob = () => {
                                     <div className="row mx-0 my-3 p-0 ">
                                         <div className="card">
                                             <div className="card-body">
-                                                <Link to={`/detail/${job.id}`} className='no-link text-dark d-flex'>
+                                                {/* <Link to={`/detail/${job.id}`} className='no-link text-dark d-flex'> */}
                                                     <div className="row m-0 p-0 d-flex ms-1 me-auto">
                                                         <p className="fw-bold m-0 p-0 ">{job.title}</p>
                                                         <p className="m-0 p-0 ">{job.company}</p>
@@ -192,7 +162,7 @@ const ListJob = () => {
                                                         </p>                                                   
                                                         {/* <img src={job.company_logo} alt="Admin" className="rounded-circle" width={50} /> */}
                                                     </div>
-                                                </Link>
+                                                {/* </Link> */}
                                             </div>
                                         </div>
                                     </div>
@@ -202,24 +172,6 @@ const ListJob = () => {
                             })
                         : 'retrieving data...' }
 
-                    </div>
-                    <div className="pagination text-center mb-3 ">
-                        {currentPage === 1 ?
-                        <button type="button" className="btn btn-secondary" disabled>prev</button> :
-                        <button type="button" className="btn btn-primary" onClick={(e) => prevPageHandler(e)}>prev</button>
-                        }
-                        <p className="mx-3 my-auto">{currentPage}</p>
-                        {currentPage === maxPage ?
-                        <button type="button" className="btn btn-secondary" disabled>next</button> :
-                        getJobListsResult.itotalData === 0 ? <button type="button" className="btn btn-secondary" disabled>next</button> : 
-                        <button type="button" className="btn btn-primary" onClick={(e) => nextPageHandler(e)}>next</button>
-                        }
-                        {/* <button type="button" className="btn btn-primary" onClick={(e) => nextPageHandler(e)}>next</button> */}
-                        <p className="mx-3 my-auto ">showing data { (1 + (currentPage - 1) * 10)} - {(currentPage * 10)}</p>
-                    </div>
-                    <div className="pagination-info mb-5 ">
-                        <p className="mx-3 my-auto ">data available : {getJobListsResult ? getJobListsResult.itotalData : '...'}</p>
-                        <p className="mx-3 my-auto ">page available : {getJobListsResult ? getJobListsResult.imaxPage : '...'}</p>
                     </div>
                 </div>
             </div>

@@ -6,10 +6,12 @@ export const DETAIL_JOB = "DETAIL_JOB"
 // export const getDataUser = (user) => {
     export const getJobLists = ({description, location, fulltime, currentPage}) => {
         const access_token = localStorage.getItem('access_token')
-        // console.log(currentPage)
+        console.log(currentPage)
         const BASE_URL = 'http://localhost:3001/api/jobs'
         let newUrl = ''
         let countUrl = ''
+        let imaxPage = 0
+        let itotalData = 0
         // console.log(description);
         // console.log(location);
         // console.log(fulltime);
@@ -45,8 +47,7 @@ export const DETAIL_JOB = "DETAIL_JOB"
                 // console.log(currentPage)
                 newUrl = `${newUrl}${url_page}`
             }
-           
-            // console.log(newUrl);
+            console.log(newUrl);
         } else {
             // console.log('tidak ada data');
             // let url_page = `page=${currentPage}`
@@ -56,6 +57,21 @@ export const DETAIL_JOB = "DETAIL_JOB"
             // console.log(newUrl);
         }
         // console.log(`count url: ${countUrl}`)
+
+        // axios({
+        //     method: 'GET',
+        //     url: countUrl,
+        //     timeout: 120000,
+        //     headers: { 'access-token': access_token}
+        // })
+        //     .then((response) => {
+        //         // berhasil get API
+        //         // console.log('berhasil dapat data');
+        //         imaxPage = Math.ceil(response.data.length / 10)
+        //         itotalData = response.data.length
+        //         console.log(`banyak page: ${imaxPage}`);
+        //         console.log(`banyak data: ${itotalData}`);
+        //     })
 
         return (dispatch) => {
     
@@ -68,56 +84,30 @@ export const DETAIL_JOB = "DETAIL_JOB"
                     errorMessage: false
                 }
             })
+    
+            // console.log('get_data_user');
             
+            // setHeader('ACCESS-TOKEN', access_token)
+            // console.log(access_token);
             // get API
+            
             axios({
                 method: 'GET',
-                url: newUrl,
+                url: countUrl,
                 timeout: 120000,
                 headers: { 'access-token': access_token}
             })
                 .then((response) => {
                     // berhasil get API
                     // console.log('berhasil dapat data');
-                    axios({
-                        method: 'GET',
-                        url: countUrl,
-                        timeout: 120000,
-                        headers: { 'access-token': access_token}
+                    dispatch({
+                        type: GET_JOB_LISTS,
+                        payload: {
+                            loading: false,
+                            data: response.data,
+                            errorMessage: false
+                        }
                     })
-                        .then((resp) => {
-                            // berhasil get API
-                            // console.log('berhasil dapat data');
-                            let imaxPage = Math.ceil(resp.data.length / 10)
-                            let itotalData = resp.data.length
-                            response.data.imaxPage = imaxPage
-                            response.data.itotalData = itotalData
-                            console.log(`banyak page: ${imaxPage}`);
-                            console.log(`banyak data: ${itotalData}`);
-
-                            dispatch({
-                                type: GET_JOB_LISTS,
-                                payload: {
-                                    loading: false,
-                                    data: response.data,
-                                    errorMessage: false
-                                }
-                            })
-                        })
-                        .catch((resp) => {
-                            // console.log('gagal dapat data');
-                            // console.log(response);
-                            // gagal get API
-                            dispatch({
-                                type: GET_JOB_LISTS,
-                                payload: {
-                                    loading: false,
-                                    data: false,
-                                    errorMessage: resp.errorMessage
-                                }
-                            })
-                        })
-                    
                 })
                 .catch((response) => {
                     // console.log('gagal dapat data');
