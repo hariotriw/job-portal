@@ -47,19 +47,28 @@ const ListJob = () => {
 		
 	}, [getJobListsResult])
 
-    const flagChangeHandle = (event) => {
-		// console.log(editFlag)
-		// setEditFlag(prevCheck => !prevCheck)
-		// if(editFlag){
-		// 	// false
-		// } else {
-		// 	// true
-		// 	setName(getDataUserResult.name)
-		// 	setEmail(getDataUserResult.email)
-		// 	setBirthdate(getDataUserResult.birthdate.slice(0,10))
-		// 	setGender(getDataUserResult.gender)
+    const searchHandle = (e) => {
+        e.preventDefault()
+        dispatch(getJobLists(description, location, fulltime))
+		// console.log(description)
+		// console.log(location)
+		// console.log(fulltime)
+    }
 
-		// }
+    const resetHandle = (e) => {
+        setDescription('')
+        setLocation('')
+        dispatch(getJobLists())
+        // setFulltime(false)
+		// console.log(description)
+		// console.log(location)
+		// console.log(fulltime)
+    }
+    
+    const flagChangeHandle = (e) => {
+        // e.preventDefault()
+		setFulltime(prevCheck => !prevCheck)
+        // console.log(fulltime);
     }
 
 
@@ -91,22 +100,25 @@ const ListJob = () => {
                                         </Form.Group>
                                     </div>
                                 </div>
-                                <div className="col-4 m-0 p-0 ">
+                                <div className="col-6 m-0 p-0 ">
                                     {/* <div className="row m-0 p-0 "></div> */}
-                                    <div className="row m-0 p-0 ">
+                                    <div className="row m-0 p-0 mt-2">
                                         <Form.Group className="my-3">
                                             <label className="mb-1" htmlFor="inputLocation"> </label>
                                             {/* <Form.Control type="text" className="form-control" id="inputLocation" name="location" placeholder="Location" value={location}  onChange={(event) => setLocation(event.target.value)} required/> */}
                                             <div className="row m-0 p-0 ">
-                                                <div className="col-6 m-0 p-0 ">
+                                                <div className="col-4 m-0 p-0 ">
                                                     <div className="form-check form-switch m-0 p-0">
                                                         <input className="form-check-input ms-0 me-auto d-flex" type="checkbox" id="flexSwitchCheckChecked"  onChange={(e) => flagChangeHandle(e)}/>
                                                         <label className="form-check-label ms-2" htmlFor="flexSwitchCheckChecked">Full Time</label>
                                                     </div>
                                                 </div>
                                                 <div className="col-6 m-0 p-0 ">
-                                                    <button type="button" className="btn btn-primary">Search</button>
+                                                    <button type="button" className="btn btn-primary px-4" onClick={(e) => searchHandle(e)}>Search</button>
+                                                    <button type="button" className="btn btn-secondary px-4 ms-2" onClick={(e) => resetHandle(e)}>Reset</button>
                                                 </div>
+                                                {/* <div className="col-4 m-0 p-0 ">
+                                                </div> */}
                                             </div>
                                         </Form.Group>
                                     </div>
@@ -118,10 +130,15 @@ const ListJob = () => {
                     <div className="lists-job">
                         <h3>Available Job</h3>
                         { getJobListsResult ?
+                            getJobListsResult.length === 0 ? 
+                            <div className="row mt-5 text-center">
+                                <p>no available job with the selected parameters</p> 
+                            </div>
+                                :
                             getJobListsResult.map((job, i) => {
                                 return (
                                     <>
-                                    <div className="row mx-0 my-2 p-0 ">
+                                    <div className="row mx-0 my-3 p-0 ">
                                         <div className="card">
                                             <div className="card-body">
                                                 <Link to={`/detail/${job.id}`} className='no-link text-dark d-flex'>
@@ -147,7 +164,7 @@ const ListJob = () => {
                                     </>
                                 )
                             })
-                        : 'no data' }
+                        : 'retrieving data...' }
 
                     </div>
                 </div>

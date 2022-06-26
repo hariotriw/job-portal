@@ -4,7 +4,41 @@ export const GET_JOB_LISTS = "GET_JOB_LISTS"
 export const DETAIL_JOB = "DETAIL_JOB"
 
 // export const getDataUser = (user) => {
-    export const getJobLists = () => {
+    export const getJobLists = (description, location, fulltime) => {
+        const BASE_URL = 'http://localhost:3001/api/jobs'
+        let newUrl = ''
+        // console.log(description);
+        // console.log(location);
+        // console.log(fulltime);
+
+        if(description !== undefined && location !== undefined && fulltime !== undefined) {
+            console.log('ada data');
+            newUrl = `${BASE_URL}?`
+            if(description){
+                let url_desc = `description=${description}`
+                console.log('ada description')
+                console.log(description)
+                newUrl = `${newUrl}${url_desc}&`
+            }
+            if(location){
+                let url_loc = `location=${location}`
+                console.log('ada location')
+                console.log(location)
+                newUrl = `${newUrl}${url_loc}&`
+            }
+            if(fulltime !== undefined){
+                let url_time = `fulltime=${fulltime}`
+                console.log('ada fulltime')
+                console.log(fulltime)
+                newUrl = `${newUrl}${url_time}`
+            }
+            console.log(newUrl);
+        } else {
+            console.log('tidak ada data');
+            newUrl = BASE_URL
+            console.log(newUrl);
+
+        }
         return (dispatch) => {
     
             // loading
@@ -24,7 +58,7 @@ export const DETAIL_JOB = "DETAIL_JOB"
             // get API
             axios({
                 method: 'GET',
-                url: 'http://localhost:3001/api/jobs',
+                url: newUrl,
                 timeout: 120000,
                 headers: { 'access-token': access_token}
             })
